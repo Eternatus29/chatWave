@@ -1,3 +1,5 @@
+import 'package:chat_wave/helper/helper_function.dart';
+import 'package:chat_wave/pages/auth/home_page.dart';
 import 'package:chat_wave/pages/auth/login_page.dart';
 import 'package:chat_wave/service/auth_service.dart';
 import 'package:chat_wave/widgets/widgets.dart';
@@ -165,10 +167,15 @@ class _RegisterPageState extends State<RegisterPage> {
       });
       await authService
           .registerUserWithEmailandPassword(fullName, email, password)
-          .then((value) {
+          .then((value) async {
         if (value == true) {
           //saving the shared preference state
+          await HelperFunctions.saveUserLoggedInStatus(true);
+          await HelperFunctions.saveUserEmailSF(email);
+          await HelperFunctions.saveUserNameSF(fullName);
+          nextScreenReplace(context, const HomePage());
         } else {
+          showSnackbar(context, Colors.red, value);
           setState(() {
             _isLoading = false;
           });
