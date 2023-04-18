@@ -1,5 +1,5 @@
 import 'package:chat_wave/helper/helper_function.dart';
-import 'package:chat_wave/pages/auth/home_page.dart';
+import 'package:chat_wave/pages/home_page.dart';
 import 'package:chat_wave/pages/auth/login_page.dart';
 import 'package:chat_wave/service/auth_service.dart';
 import 'package:chat_wave/widgets/widgets.dart';

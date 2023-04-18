@@ -1,5 +1,5 @@
 import 'package:chat_wave/helper/helper_function.dart';
-import 'package:chat_wave/pages/auth/home_page.dart';
+import 'package:chat_wave/pages/home_page.dart';
 import 'package:chat_wave/pages/auth/login_page.dart';
 import 'package:chat_wave/shared/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -43,7 +43,9 @@ class _MyAppState extends State<MyApp> {
   getUserLoggedInStatus() async {
     await HelperFunctions.getUserLoggedInStatus().then((value) {
       if (value != null) {
-        _isSignedIn = value;
+        setState(() {
+          _isSignedIn = value;
+        });
       }
     });
   }
