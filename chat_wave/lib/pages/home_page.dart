@@ -4,6 +4,7 @@ import 'package:chat_wave/pages/profile_page.dart';
 import 'package:chat_wave/pages/search_page.dart';
 import 'package:chat_wave/service/auth_service.dart';
 import 'package:chat_wave/service/database_service.dart';
+import 'package:chat_wave/widgets/group_tile.dart';
 import 'package:chat_wave/widgets/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,15 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     gettingUserData();
+  }
+
+  // String manipulation
+  String getId(String res) {
+    return res.substring(0, res.indexOf("_"));
+  }
+
+  String getName(String res) {
+    return res.substring(res.indexOf("_") + 1);
   }
 
   gettingUserData() async {
@@ -191,7 +201,8 @@ class _HomePageState extends State<HomePage> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return AlertDialog(
+          return StatefulBuilder(builder: ((context, setState) {
+            return AlertDialog(
               title: const Text(
                 "Create a group",
                 textAlign: TextAlign.left,
@@ -257,8 +268,10 @@ class _HomePageState extends State<HomePage> {
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).primaryColor),
                   child: const Text("CREATE"),
-                ),
-              ]);
+                )
+              ],
+            );
+          }));
         });
   }
 
@@ -270,7 +283,16 @@ class _HomePageState extends State<HomePage> {
         if (snapshot.hasData) {
           if (snapshot.data['groups'] != null) {
             if (snapshot.data['groups'].length != 0) {
-              return Text("HELLO");
+              return ListView.builder(
+                itemCount: snapshot.data['groups'].length,
+                itemBuilder: (context, index) {
+                  int reverseIndex = snapshot.data['groups'].length - index - 1;
+                  return GroupTile(
+                      groupId: getId(snapshot.data['groups'][reverseIndex]),
+                      groupName: getName(snapshot.data['groups'][reverseIndex]),
+                      userName: snapshot.data['fullName']);
+                },
+              );
             } else {
               return noGroupWidget();
             }
