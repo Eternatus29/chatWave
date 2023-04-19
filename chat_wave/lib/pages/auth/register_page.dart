@@ -7,7 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -23,9 +23,6 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-      ),
       body: _isLoading
           ? Center(
               child: CircularProgressIndicator(
@@ -40,58 +37,62 @@ class _RegisterPageState extends State<RegisterPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        const Text("ChatWave",
-                            style: TextStyle(
-                                fontSize: 40, fontWeight: FontWeight.bold)),
+                        const Text(
+                          "ChatWave",
+                          style: TextStyle(
+                              fontSize: 40, fontWeight: FontWeight.bold),
+                        ),
                         const SizedBox(height: 10),
                         const Text(
-                            "Create your account now and find your friends online!",
+                            "Create your account now to chat and explore",
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.w400)),
                         Image.asset("assets/register.png"),
                         TextFormField(
-                            decoration: textInputDecoration.copyWith(
-                                labelText: "Full Name",
-                                prefixIcon: Icon(
-                                  Icons.person,
-                                  color: Theme.of(context).primaryColor,
-                                )),
-                            onChanged: (val) {
-                              setState(() {
-                                fullName = val;
-                              });
-                            },
-
-                            // Checks the validation
-                            validator: (val) {
-                              if (val!.isNotEmpty) {
-                                return null;
-                              } else {
-                                return "Name cannot be empty";
-                              }
-                            }),
-                        const SizedBox(height: 15),
+                          decoration: textInputDecoration.copyWith(
+                              labelText: "Full Name",
+                              prefixIcon: Icon(
+                                Icons.person,
+                                color: Theme.of(context).primaryColor,
+                              )),
+                          onChanged: (val) {
+                            setState(() {
+                              fullName = val;
+                            });
+                          },
+                          validator: (val) {
+                            if (val!.isNotEmpty) {
+                              return null;
+                            } else {
+                              return "Name cannot be empty";
+                            }
+                          },
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
                         TextFormField(
-                            decoration: textInputDecoration.copyWith(
-                                labelText: "Email",
-                                prefixIcon: Icon(
-                                  Icons.email,
-                                  color: Theme.of(context).primaryColor,
-                                )),
-                            onChanged: (val) {
-                              setState(() {
-                                email = val;
-                              });
-                            },
+                          decoration: textInputDecoration.copyWith(
+                              labelText: "Email",
+                              prefixIcon: Icon(
+                                Icons.email,
+                                color: Theme.of(context).primaryColor,
+                              )),
+                          onChanged: (val) {
+                            setState(() {
+                              email = val;
+                            });
+                          },
 
-                            // Checks the validation
-                            validator: (val) {
-                              return RegExp(
-                                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                      .hasMatch(val!)
-                                  ? null
-                                  : "Please enter a valid email.";
-                            }),
+                          // check tha validation
+                          validator: (val) {
+                            return RegExp(
+                                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                    .hasMatch(val!)
+                                ? null
+                                : "Please enter a valid email";
+                          },
+                        ),
                         const SizedBox(height: 15),
                         TextFormField(
                           obscureText: true,
@@ -139,20 +140,21 @@ class _RegisterPageState extends State<RegisterPage> {
                           height: 10,
                         ),
                         Text.rich(TextSpan(
-                            text: "Already have an account?",
-                            style: const TextStyle(
-                                color: Colors.black, fontSize: 14),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: "Login Now",
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      decoration: TextDecoration.underline),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      nextScreen(context, const LoginPage());
-                                    })
-                            ])),
+                          text: "Already have an account? ",
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 14),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: "Login now",
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    decoration: TextDecoration.underline),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    nextScreen(context, const LoginPage());
+                                  }),
+                          ],
+                        )),
                       ],
                     )),
               ),
@@ -169,7 +171,7 @@ class _RegisterPageState extends State<RegisterPage> {
           .registerUserWithEmailandPassword(fullName, email, password)
           .then((value) async {
         if (value == true) {
-          //saving the shared preference state
+          // saving the shared preference state
           await HelperFunctions.saveUserLoggedInStatus(true);
           await HelperFunctions.saveUserEmailSF(email);
           await HelperFunctions.saveUserNameSF(fullName);

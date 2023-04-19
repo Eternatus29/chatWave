@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+  const SearchPage({Key? key}) : super(key: key);
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -54,10 +54,7 @@ class _SearchPageState extends State<SearchPage> {
         title: const Text(
           "Search",
           style: TextStyle(
-            fontSize: 27,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+              fontSize: 27, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
       body: Column(
@@ -72,13 +69,10 @@ class _SearchPageState extends State<SearchPage> {
                     controller: searchController,
                     style: const TextStyle(color: Colors.white),
                     decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Search Groups....",
-                      hintStyle: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
+                        border: InputBorder.none,
+                        hintText: "Search groups....",
+                        hintStyle:
+                            TextStyle(color: Colors.white, fontSize: 16)),
                   ),
                 ),
                 GestureDetector(
@@ -86,13 +80,15 @@ class _SearchPageState extends State<SearchPage> {
                     initiateSearchMethod();
                   },
                   child: Container(
-                    height: 40,
                     width: 40,
+                    height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(40),
+                        color: Colors.white.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(40)),
+                    child: const Icon(
+                      Icons.search,
+                      color: Colors.white,
                     ),
-                    child: const Icon(Icons.search, color: Colors.white),
                   ),
                 )
               ],
@@ -144,12 +140,12 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   joinedOrNot(
-      String userName, String groupId, String groupName, String Admin) async {
+      String userName, String groupId, String groupname, String admin) async {
     await DatabaseService(uid: user!.uid)
-        .isUserJoined(groupName, groupId, userName)
+        .isUserJoined(groupname, groupId, userName)
         .then((value) {
       setState(() {
-        isJoined = true;
+        isJoined = value;
       });
     });
   }
@@ -159,7 +155,7 @@ class _SearchPageState extends State<SearchPage> {
     // function to check whether user already exists in group
     joinedOrNot(userName, groupId, groupName, admin);
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       leading: CircleAvatar(
         radius: 30,
         backgroundColor: Theme.of(context).primaryColor,
@@ -179,8 +175,7 @@ class _SearchPageState extends State<SearchPage> {
             setState(() {
               isJoined = !isJoined;
             });
-            showSnackbar(
-                context, Colors.green, "Successfully joined the group.");
+            showSnackbar(context, Colors.green, "Successfully joined he group");
             Future.delayed(const Duration(seconds: 2), () {
               nextScreen(
                   context,
@@ -192,7 +187,7 @@ class _SearchPageState extends State<SearchPage> {
           } else {
             setState(() {
               isJoined = !isJoined;
-              showSnackbar(context, Colors.red, "Left the group $groupName.");
+              showSnackbar(context, Colors.red, "Left the group $groupName");
             });
           }
         },
@@ -217,8 +212,8 @@ class _SearchPageState extends State<SearchPage> {
                 ),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child:
-                    const Text("Join", style: TextStyle(color: Colors.white)),
+                child: const Text("Join Now",
+                    style: TextStyle(color: Colors.white)),
               ),
       ),
     );

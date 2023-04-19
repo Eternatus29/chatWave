@@ -10,7 +10,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -25,9 +25,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-      ),
       body: _isLoading
           ? Center(
               child: CircularProgressIndicator(
@@ -43,36 +40,38 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        const Text("ChatWave",
-                            style: TextStyle(
-                                fontSize: 40, fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 10),
                         const Text(
-                            "Login now and join a secure communication platform.",
+                          "ChatWave",
+                          style: TextStyle(
+                              fontSize: 40, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 10),
+                        const Text("Login now to see what they are talking!",
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.w400)),
                         Image.asset("assets/login.png"),
                         TextFormField(
-                            decoration: textInputDecoration.copyWith(
-                                labelText: "Email",
-                                prefixIcon: Icon(
-                                  Icons.email,
-                                  color: Theme.of(context).primaryColor,
-                                )),
-                            onChanged: (val) {
-                              setState(() {
-                                email = val;
-                              });
-                            },
+                          decoration: textInputDecoration.copyWith(
+                              labelText: "Email",
+                              prefixIcon: Icon(
+                                Icons.email,
+                                color: Theme.of(context).primaryColor,
+                              )),
+                          onChanged: (val) {
+                            setState(() {
+                              email = val;
+                            });
+                          },
 
-                            // Checks the validation
-                            validator: (val) {
-                              return RegExp(
-                                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                      .hasMatch(val!)
-                                  ? null
-                                  : "Please enter a valid email.";
-                            }),
+                          // check tha validation
+                          validator: (val) {
+                            return RegExp(
+                                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                    .hasMatch(val!)
+                                ? null
+                                : "Please enter a valid email";
+                          },
+                        ),
                         const SizedBox(height: 15),
                         TextFormField(
                           obscureText: true,
@@ -120,20 +119,21 @@ class _LoginPageState extends State<LoginPage> {
                           height: 10,
                         ),
                         Text.rich(TextSpan(
-                            text: "Don't have an account?",
-                            style: const TextStyle(
-                                color: Colors.black, fontSize: 14),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: "Register Here",
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      decoration: TextDecoration.underline),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      nextScreen(context, const RegisterPage());
-                                    })
-                            ])),
+                          text: "Don't have an account? ",
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 14),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: "Register here",
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    decoration: TextDecoration.underline),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    nextScreen(context, const RegisterPage());
+                                  }),
+                          ],
+                        )),
                       ],
                     )),
               ),
@@ -153,12 +153,10 @@ class _LoginPageState extends State<LoginPage> {
           QuerySnapshot snapshot =
               await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
                   .gettingUserData(email);
-
           // saving the values to our shared preferences
           await HelperFunctions.saveUserLoggedInStatus(true);
           await HelperFunctions.saveUserEmailSF(email);
           await HelperFunctions.saveUserNameSF(snapshot.docs[0]['fullName']);
-
           nextScreenReplace(context, const HomePage());
         } else {
           showSnackbar(context, Colors.red, value);
